@@ -17,15 +17,15 @@ namespace RoomCombat {
             }
             if (other.GetComponent<Character>()) {
                 other.GetComponentInChildren<HealthBar>().TakeDame(character.attackDame, character);
-                //PushEnemyInAttack(other.GetComponent<Rigidbody>());
+                PushEnemyInAttack(other.GetComponent<Rigidbody>());
                 //Debug.Log("Call take dame");
             }
             
         }
         float pushFocre = 3;
         public void PushEnemyInAttack(Rigidbody rb) {
-            Vector3 directionToEnenmy = rb.transform.position - transform.position;
-            directionToEnenmy.y = 1;
+            Vector3 directionToEnenmy = rb.transform.position - m_Collider.transform.position;
+            directionToEnenmy.y = transform.position.y;
             rb.AddForce(directionToEnenmy.normalized * pushFocre, ForceMode.Impulse);
         }
 

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace RoomCombat {
     public class Character : MonoBehaviour {
-        public float health;
+        public float health =100;
         public float speed;
-        public float attackDame;
+        public float attackDame = 10;
         public float cooldownAttack;
         public int countKill;
 

@@ -19,6 +19,7 @@ namespace RoomCombat {
         private void Follow(Transform FollowTarget) {
             if (FollowTarget == null) return;
             Vector3 desiredPosition = FollowTarget.position + offset;
+            desiredPosition = new Vector3(desiredPosition.x, offset.y, desiredPosition.z);
             this.transform.position = desiredPosition;
         }
     }

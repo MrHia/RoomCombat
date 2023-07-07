@@ -87,7 +87,7 @@ namespace RoomCombat {
             moveDirection = moveDirection + cameraObject.right * horizontal;
             moveDirection.Normalize();
             moveDirection.y = 0;
-            moveDirection = moveDirection * speed;  
+            moveDirection = moveDirection * speed;
             Vector3 movementVelocity = moveDirection;
             playerRigidbody.velocity = movementVelocity;
         }
@@ -116,13 +116,16 @@ namespace RoomCombat {
         private void Update() {
             horizontal = Input.GetAxis("Horizontal");
             vertical = Input.GetAxis("Vertical");
-            if (joystick != null && (joystick.HorizontalAxis != 0  || joystick.VerticalAxis !=0)) {
+            if (joystick != null && (joystick.HorizontalAxis != 0 || joystick.VerticalAxis != 0)) {
                 horizontal = joystick.HorizontalAxis;
                 vertical = joystick.VerticalAxis;
             }
             /*            horizontal = joystick.HorizontalAxis;
                         vertical = joystick.VerticalAxis;*/
-            
+            if (!isGround && this.transform.position.y < -0.2 || this.transform.position.y < -0.2) {
+                playerState = PlayerState.Dead;
+            }
+            /*            Debug.Log(this.transform.position.y);*/
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
             switch (playerState) {
                 case PlayerState.Idle:
@@ -172,15 +175,17 @@ namespace RoomCombat {
             }
         }
         private void OnCollisionEnter(Collision collision) {
-            if (collision.gameObject.CompareTag("Ground") ) {
+            if (collision.gameObject.CompareTag("Ground")) {
+                playerRigidbody.mass = 1f;
                 isGround = true;
             }
 
         }
         private void OnCollisionExit(Collision collision) {
-            if (collision.gameObject.CompareTag("Ground") && transform.position.y <0f) {
+            if (collision.gameObject.CompareTag("Ground")) {
+                playerRigidbody.mass = 10f;
                 isGround = false;
-                playerState = PlayerState.Dead;
+
             }
         }
         public void Attack(InputAction.CallbackContext context) {
