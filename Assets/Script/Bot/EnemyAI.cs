@@ -250,9 +250,6 @@ namespace RoomCombat {
                 timerRandom -= Time.deltaTime;
             }
         }
-        public override void Dead() {
-            Destroy(gameObject);
-        }
     }
 
 }
