@@ -32,20 +32,21 @@ namespace RoomCombat {
             Time.timeScale = 1f;
         }
         [SerializeField] bool isOn = true;
+        [SerializeField] GameObject activeSound;
+/*        [SerializeField] GameObject unactiveSound;*/
         public void SoundSetting() {
             /*Debug.Log("Click");*/
             if (isOn) {
 
                 FindObjectOfType<soundManager>().TurnOffSound();
+                activeSound.SetActive(false);
                 isOn = false;
             }
             else {
                 FindObjectOfType<soundManager>().TurnOnSound();
+                activeSound.SetActive(true);
                 isOn = true;
             }
-        }
-        public void ShowKill() {
-
         }
         public void ReLoadScene() { 
             Time.timeScale = 1f;

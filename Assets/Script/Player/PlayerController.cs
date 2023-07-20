@@ -12,7 +12,8 @@ namespace RoomCombat {
             Moving,
             Attacking,
             Dashing,
-            Dead
+            Dead,
+            Hurt
         }
         [SerializeField] private PlayerState playerState = PlayerState.Idle;
         // Animation
@@ -37,6 +38,9 @@ namespace RoomCombat {
         public Transform attackPos;
         //Dead
         public bool isGround;
+        //hurt
+        public float cooldowntHurt = 1.1f;
+        public float hurtTimer = 0;
         //input
         InputSystem inputSystem;
         [SerializeField] private InputAction playerMove;
@@ -107,10 +111,6 @@ namespace RoomCombat {
             Quaternion targetRotate = Quaternion.LookRotation(targetDirection);
             Quaternion playerRotate = Quaternion.Slerp(transform.rotation, targetRotate, rotationSpeed * Time.deltaTime);
             transform.rotation = playerRotate;
-            /// Quay vfx 
-            Quaternion parentRotation = transform.rotation;
-            Quaternion childRotation = parentRotation * Quaternion.Euler(rotationChildVfx);
-            childVifxPlayer.rotation = childRotation;
         }
 
         private void Update() {
@@ -129,8 +129,9 @@ namespace RoomCombat {
             moveAmount = Mathf.Clamp01(Mathf.Abs(horizontal) + Mathf.Abs(vertical));
             switch (playerState) {
                 case PlayerState.Idle:
+                    animator.SetBool("isHurt", false); 
                     Rotate();
-                    rotationChildVfx = new Vector3(0, 0, 0);
+                    /*rotationChildVfx = new Vector3(0, 0, 0);*/
                     animator.SetBool("isRun", false);
                     if (moveAmount != 0) {
                         playerState = PlayerState.Moving;
@@ -138,8 +139,9 @@ namespace RoomCombat {
                     break;
 
                 case PlayerState.Moving:
+                    animator.SetBool("isHurt", false);
                     Rotate();
-                    rotationChildVfx = new Vector3(0, 20f, 0);
+                    /*rotationChildVfx = new Vector3(0, 20f, 0);*/
                     Move();
                     animator.SetBool("isRun", true);
                     if (moveAmount == 0) {
@@ -147,8 +149,8 @@ namespace RoomCombat {
                     }
                     break;
                 case PlayerState.Attacking:
-
-                    rotationChildVfx = new Vector3(0, -20, 0);
+                    animator.SetBool("isHurt", false);
+                    /*rotationChildVfx = new Vector3(0, -20, 0);*/
                     if (attackTimer <= 0f) {
                         playerState = PlayerState.Idle;
                     }
@@ -158,7 +160,8 @@ namespace RoomCombat {
                     }
                     break;
                 case PlayerState.Dashing:
-                    rotationChildVfx = new Vector3(0, 20f, 0);
+                    animator.SetBool("isHurt", false);
+                    /*rotationChildVfx = new Vector3(0, 20f, 0);*/
                     if (dashTimer <= 0.5f) {
                         playerState = PlayerState.Idle;
                     }
@@ -168,10 +171,16 @@ namespace RoomCombat {
                         animator.SetBool("isRun", false);
                     }
                     break;
+                case PlayerState.Hurt:
+                    Hurt();
+                    break;
                 case PlayerState.Dead:
+                    animator.SetBool("isHurt", false);
                     animator.SetBool("isRun", false);
                     FindObjectOfType<UIManager>().LoseGame();
                     break;
+                
+
             }
         }
         private void OnCollisionEnter(Collision collision) {
@@ -213,6 +222,22 @@ namespace RoomCombat {
                 playerState = PlayerState.Dashing;
                 dashTimer = dashDuration;
                 animator.SetTrigger("Dash");
+            }
+        }
+        public void HurtStart() {
+            playerState = PlayerState.Hurt;
+        }
+        public void Hurt() {
+            Debug.Log("Hurt player");
+            if (hurtTimer >= cooldowntHurt) {
+                hurtTimer = 0f;
+                playerState = PlayerState.Idle;
+                animator.SetBool("isHurt", false);
+            }
+            else {
+                animator.SetBool("isRun", false);
+                animator.SetBool("isHurt", true);
+                hurtTimer += Time.deltaTime;
             }
         }
         public override void Dead() {

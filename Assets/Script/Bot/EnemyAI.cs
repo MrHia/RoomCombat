@@ -4,8 +4,8 @@ using UnityEngine.AI;
 namespace RoomCombat {
     public class EnemyAI : Character {
         //bot stats
-        private NavMeshAgent m_Agent;
-        private Collider m_Collider;
+        private NavMeshAgent _agent;
+        private Collider _collider;
 
         //Animation
         private Animator animator;
@@ -24,7 +24,7 @@ namespace RoomCombat {
         public Transform attackPos;
         private float timerAttack;
         public bool hasInEscape;
-        /*    bool alreadfyAttack;*/
+        /*    bool alreadfy Attack;*/
         //Escape
         public float timeDowntEscape = 5f;
         private float timerEscape = 5;
@@ -43,10 +43,10 @@ namespace RoomCombat {
         public bool playerInchaseRadius, playerInattackRadius;
         private void Start() {
             animator = GetComponentInChildren<Animator>();
-            m_Agent = GetComponent<NavMeshAgent>();
+            _agent = GetComponent<NavMeshAgent>();
             centrePoint = this.transform;
-            m_Collider = GetComponent<Collider>();
-            m_Agent.speed = speed;
+            _collider = GetComponent<Collider>();
+            _agent.speed = speed;
         }
         private void Update() {
             switch (stateBot) {
@@ -60,7 +60,7 @@ namespace RoomCombat {
                     Patroling();
                     break;
                 case StatesBot.Chase:
-                    m_Agent.speed = 6;
+                    _agent.speed = 6;
                     animator.SetBool("isFollow", true);
                     animator.SetBool("isPatrolling", false);
                     Chase();
@@ -78,16 +78,16 @@ namespace RoomCombat {
                     if (health <= 30 && GetHpEnemy() >= health && timerAttack <= 0f) {
                         Vector3 point;
                         while (!RandomPoint(centrePoint.position, patrolRadius, out point)) {
-
-                            Debug.DrawRay(point, Vector3.up, Color.red, 2.0f);
-                            m_Agent.SetDestination(point);
+  
                         }
+                        Debug.DrawRay(point, Vector3.up, Color.red, 2.0f);
+                        _agent.SetDestination(point);
                         stateBot = StatesBot.Escape;
                         return;
                     }
                     if (timerAttack <= 0f) {
                         stateBot = StatesBot.Chase;
-                        m_Agent.speed = 6;
+                        _agent.speed = 6;
                     }
                     else {
                         timerAttack -= Time.deltaTime;
@@ -97,7 +97,7 @@ namespace RoomCombat {
 
                     break;
                 case StatesBot.Escape:
-                    m_Agent.speed = 6;
+                    _agent.speed = 6;
                     Escape();
                     animator.SetBool("isFollow", true);
                     //change state
@@ -112,9 +112,9 @@ namespace RoomCombat {
             Gizmos.DrawWireSphere(transform.position, chaseRadius);
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireSphere(transform.position, attackRadius);
-            if (m_Agent != null && m_Agent.hasPath) {
+            if (_agent != null && _agent.hasPath) {
                 Gizmos.color = Color.red;
-                Gizmos.DrawSphere(m_Agent.destination, 0.5f);
+                Gizmos.DrawSphere(_agent.destination, 0.5f);
             }
         }
 
@@ -122,7 +122,7 @@ namespace RoomCombat {
             enemys = Physics.OverlapSphere(center, range);
 
             foreach (Collider collider in enemys) {
-                if (collider != m_Collider && collider.gameObject.GetComponent<Character>()) {
+                if (collider != _collider && collider.gameObject.GetComponent<Character>()) {
                     return true;
                 }
             }
@@ -133,31 +133,28 @@ namespace RoomCombat {
         }
         private void Patroling() {
 
-            if (m_Agent.remainingDistance <= m_Agent.stoppingDistance) {
+            if (_agent.remainingDistance <= _agent.stoppingDistance) {
                 Vector3 point;
                 if (cooldownChangeDestinationTimer >= cooldownChangeDestination) {
                     if (RandomPoint(centrePoint.position, patrolRadius, out point)) {
                         Debug.DrawRay(point, Vector3.up, Color.red, 2.0f);
-                        m_Agent.SetDestination(point);
+                        _agent.SetDestination(point);
                         animator.SetBool("isPatrolling", true);
                     }
                     else {
                         return;
                     }
                     cooldownChangeDestinationTimer = 0;
-                    m_Agent.speed = 3;
+                    _agent.speed = 2;
                 }
                 else {
                     cooldownChangeDestinationTimer += Time.deltaTime * 0.5f;
                     animator.SetBool("isPatrolling", false);
-                    m_Agent.speed = 0;
+                    _agent.speed = 0;
                     return;
                 }
-
-
-
-
             }
+
 
         }
         bool RandomPoint(Vector3 center, float range, out Vector3 result) {
@@ -178,13 +175,13 @@ namespace RoomCombat {
                 return;
             }
             else
-                m_Agent.SetDestination(targetChase.position);
+                _agent.SetDestination(targetChase.position);
         }
         public void FindingClosestDistance(Collider[] m_enemys, ref Transform targetChase) {
             Vector3 m_Position = transform.position;
             float closestDistance = Mathf.Infinity;
             foreach (Collider targetEnemy in m_enemys) {
-                if (targetEnemy != m_Collider && targetEnemy.gameObject.GetComponent<Character>()) {
+                if (targetEnemy != _collider && targetEnemy.gameObject.GetComponent<Character>()) {
                     Vector3 directionToTarget = targetEnemy.transform.position - m_Position;
                     float dSqrToTarget = directionToTarget.sqrMagnitude;
                     if (dSqrToTarget < closestDistance) {
@@ -196,7 +193,7 @@ namespace RoomCombat {
         }
         public override void Attack() {
             if (stateBot != StatesBot.Attack) {
-                m_Agent.speed = 0;
+                _agent.speed = 0;
                 stateBot = StatesBot.Attack;
                 FindObjectOfType<soundManager>().Play("Sword");
                 timerAttack = cooldownAttack;
@@ -217,11 +214,11 @@ namespace RoomCombat {
             return 0;
         }
         public void Escape() {
-            if (m_Agent.remainingDistance <= m_Agent.stoppingDistance) {
+            if (_agent.remainingDistance <= _agent.stoppingDistance) {
                 Vector3 point;
                 if (RandomPoint(centrePoint.position, patrolRadius, out point)) {
                     Debug.DrawRay(point, Vector3.up, Color.red, 2.0f);
-                    m_Agent.SetDestination(point);
+                    _agent.SetDestination(point);
                 }
             }
             if (CheckisEnemyinSphere(transform.position, chaseRadius)) {
@@ -249,6 +246,9 @@ namespace RoomCombat {
             else {
                 timerRandom -= Time.deltaTime;
             }
+        }
+        public override void Dead() {
+            Destroy(gameObject);
         }
     }
 

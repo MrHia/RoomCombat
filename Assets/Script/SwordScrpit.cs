@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -16,16 +17,23 @@ namespace RoomCombat {
                 return;
             }
             if (other.GetComponent<Character>()) {
-                other.GetComponentInChildren<HealthBar>().TakeDame(character.attackDame, character);
+                if (other.GetComponentInChildren<HealthBar>())
+                    other.GetComponentInChildren<HealthBar>().TakeDame(character.attackDame, character);
+                if (other.GetComponent<StateController>())
+                    other.GetComponent<StateController>().OnHurt();
+                //other.GetComponent<Character>().GetComponent().HurtStart();
+                if (other.GetComponent<EnemyAI1>())
+                    other.GetComponent<EnemyAI1>().HurtStart();
+                if (other.GetComponent<PlayerController>())
+                    other.GetComponent<PlayerController>().HurtStart();
                 PushEnemyInAttack(other.GetComponent<Rigidbody>());
-                //Debug.Log("Call take dame");
             }
-            
+
         }
-        float pushFocre = 3;
+        float pushFocre = 7.5f;
         public void PushEnemyInAttack(Rigidbody rb) {
             Vector3 directionToEnenmy = rb.transform.position - m_Collider.transform.position;
-            directionToEnenmy.y = transform.position.y;
+            directionToEnenmy.y = 0f;
             rb.AddForce(directionToEnenmy.normalized * pushFocre, ForceMode.Impulse);
         }
 

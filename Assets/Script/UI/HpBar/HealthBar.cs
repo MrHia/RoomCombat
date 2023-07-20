@@ -11,9 +11,6 @@ namespace RoomCombat {
         public float health;
         public Transform hpBarPos;
 
-        /*[SerializeField] GameObject player;
-        private PlayerController playerController = null;
-        private EnemyAI enemyAI = null;*/
 
         //player
         private Action<float> setHpDelegate = null;
@@ -47,6 +44,7 @@ namespace RoomCombat {
                 uiManager.CountAlive();
                 uiManager.CountKillPlayer();
                 deadDelegate();
+                Destroy(this.gameObject);
                 return;
             }
             health -= dame;
@@ -57,7 +55,7 @@ namespace RoomCombat {
             healthBarsManager.DeleteHealthBar(indexHealBar);
         }
         private void LateUpdate() {
-            //if (isPlayer) return;
+/*            if (isPlayer) return;*/
             healthBarsManager.UpdatePositionHealthBar(indexHealBar, transform.position);
         }
     }
