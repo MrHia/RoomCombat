@@ -1481,27 +1481,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7962407034831581314, guid: 0d0beabafc641bd439c430139e7eefb0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 278.46994
+      value: 253.44
       objectReference: {fileID: 0}
     - target: {fileID: 7962407034831581314, guid: 0d0beabafc641bd439c430139e7eefb0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 278.46994
+      value: 253.44
       objectReference: {fileID: 0}
     - target: {fileID: 7962628684355034726, guid: 0d0beabafc641bd439c430139e7eefb0, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 278.46994
+      value: 253.44
       objectReference: {fileID: 0}
     - target: {fileID: 7962628684355034726, guid: 0d0beabafc641bd439c430139e7eefb0, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 278.46994
+      value: 253.44
       objectReference: {fileID: 0}
     - target: {fileID: 7962628684355034726, guid: 0d0beabafc641bd439c430139e7eefb0, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 183.5589
+      value: 178.048
       objectReference: {fileID: 0}
     - target: {fileID: 7962628684355034726, guid: 0d0beabafc641bd439c430139e7eefb0, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 241.76254
+      value: 220.032
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0d0beabafc641bd439c430139e7eefb0, type: 3}
@@ -1906,6 +1906,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2888295227178450385, guid: 31635eda4e0764c4a9ff929e30c9e566, type: 3}
+      propertyPath: m_AllowDynamicResolution
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2888295227178450387, guid: 31635eda4e0764c4a9ff929e30c9e566, type: 3}
       propertyPath: Camera
       value: 
@@ -1923,6 +1927,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5986296686290667584, guid: cf349131512230c48b395b26039bf86f, type: 3}
+      propertyPath: m_Shadows.m_Type
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 5986296686290667585, guid: cf349131512230c48b395b26039bf86f, type: 3}
       propertyPath: m_RootOrder
       value: 1

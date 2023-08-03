@@ -59,10 +59,11 @@ namespace RoomCombat {
         public void CountAlive() {
             countAlive -= 1;
             countAlivetext.text = "Alive: " + countAlive.ToString();
+            bool lose = LosePanel.gameObject.activeSelf;
             if(playerController == null) {
                 return;
             }
-            if(countAlive <= 1 && playerController.GetHp()>0) {
+            if(countAlive <= 1 && playerController.GetHp()>0 && !lose) {
                 //Debug.LogWarning(playerController.GetHp());
                 Time.timeScale = 0f;
                 WinnerPanel.gameObject.SetActive(true);
